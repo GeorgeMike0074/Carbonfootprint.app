@@ -1,5 +1,6 @@
 import sqlite3
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 import joblib
@@ -27,43 +28,41 @@ def get_data(conn, cursor):
                                     'Diet_and_Food_Choices', 'Waste_Management', 'Estimated_Carbon_Footprint']).dropna(subset=["Estimated_Carbon_Footprint"])
 
     df.index = df.ID
-    df.drop("ID", 1, inplace=True)
+    df.drop("ID", axis=1, inplace=True)
     return df
     
 
 
 def get_data_by_id(conn, cursor, id_to_fetch):
-    try:
-        # Load data with the specified ID from the database
-        cursor.execute('''
-            SELECT 
-                ID,
-                Electricity_and_Energy_Consumption,
-                Transportation_and_Commuting,
-                Diet_and_Food_Choices,
-                Waste_Management,
-                Estimated_Carbon_Footprint
-            FROM carbon_footprint
-            WHERE ID = ?
-        ''', (id_to_fetch,))
-        data = cursor.fetchone()
-
-        if data:
-            # Create a DataFrame from the fetched data
-            df = pd.DataFrame([data], columns=['ID', 'Electricity_and_Energy_Consumption', 'Transportation_and_Commuting',
-                                               'Diet_and_Food_Choices', 'Waste_Management', 'Estimated_Carbon_Footprint'])
-            df.index = df.ID
-            df.drop("ID", 1, inplace=True)
-            return df['Electricity_and_Energy_Consumption', 
-                      'Transportation_and_Commuting',
-                      'Diet_and_Food_Choices', 
-                      'Waste_Management'].values.reshape(1, -1)
-        else:
-            print(f"No data found for ID {id_to_fetch}")
-            return None
-    except Exception as e:
-        print(f"Error fetching data: {str(e)}")
+    # try:
+    # Load data with the specified ID from the database
+    cursor.execute('''
+        SELECT 
+            ID,
+            Electricity_and_Energy_Consumption,
+            Transportation_and_Commuting,
+            Diet_and_Food_Choices,
+            Waste_Management,
+            Estimated_Carbon_Footprint
+        FROM carbon_footprint
+        WHERE ID = ?
+    ''', (id_to_fetch,))
+    data = cursor.fetchone()
+    print(list(data))
+    if data:
+        # # Create a DataFrame from the fetched data
+        # df = pd.DataFrame(list(data), columns=['ID', 'Electricity_and_Energy_Consumption', 'Transportation_and_Commuting',
+        #                                     'Diet_and_Food_Choices', 'Waste_Management', 'Estimated_Carbon_Footprint'])
+        # df.index = df.ID
+        # df.drop("ID", axis=1, inplace=True)
+        print(data[1:-1])
+        return np.array(data[1:-1]).reshape(1, -1)
+    else:
+        print(f"No data found for ID {id_to_fetch}")
         return None
+    # except Exception as e:
+    #     print(f"Error fetching data: {str(e)}")
+    #     return None
 
 def train_model(data):
     # Assuming 'data' is a DataFrame with the following columns:
