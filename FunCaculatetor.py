@@ -43,6 +43,7 @@ def check_and_retrain_model(conn, cursor):
 
     # Check if additional 1500 samples have been added
     if total_samples - record_count >= 1500 :
+    # if True:
         # Retrieve all data from the database
        
         df = get_data(conn, cursor)
@@ -610,10 +611,11 @@ def predict_total_carbon_footprint(conn, cursor, id):
     if id is None: st.error("You need to enter your data before footprint can be estimated")
     else:
         input_data = get_data_by_id(conn, cursor, id)
+        print(input_data)
 
-        if input_data:
+        if input_data.all():
             prediction = predict_carbon_footprint(input_data)
-            st.header('Based on your input your carbon footprint is estimated at' + " " + str(round(prediction, 4)) + " " + "Metric Tonnes")
+            st.header('Based on your input your carbon footprint is estimated at' + " " + str(round(prediction[0], 4)) + " " + "Metric Tonnes")
         else: st.error("You need to enter your data before footprint can be estimated")
     
 
@@ -649,7 +651,7 @@ def main():
         display_carbon_footprint_breakdown(conn, cursor)
 
     if st.sidebar.button("Predict total Carbon Footprint"):
-
+        print(f"Session state: {st.session_state.pk}")
         predict_total_carbon_footprint(conn, cursor, st.session_state.pk)
 
     close_db_connection(conn)
