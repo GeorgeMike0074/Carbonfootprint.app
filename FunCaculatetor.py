@@ -273,7 +273,7 @@ def collect_public_transport_data(conn, cursor):
             conn.commit()
             
             # Display the calculated carbon footprint
-            st.title('Your Public Transport Carbon Footprint is' + " " + str(round(total_public_transport_footprint, 4)) + " " + "Metric Tonnes")
+            st.header('Based on your input, your predicted carbon footprint is ' + " " + str(round(prediction[0], 4)) + " " + "kgCO2/kg")
 
 
 
