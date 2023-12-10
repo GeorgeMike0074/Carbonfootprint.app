@@ -127,7 +127,6 @@ custom_css = f"""
         background-size: cover;
     }}
 """
-st.markdown(f'<style>{custom_css}</style>', unsafe_allow_html=True)
 def collect_household_data(conn, cursor):
     st.subheader("Enter Data")
     
