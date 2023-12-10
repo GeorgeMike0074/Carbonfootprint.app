@@ -541,7 +541,7 @@ def pico(conn, cursor):
             st.warning("No data available to plot the doughnut chart.")
     close_db_connection(conn)
 
-
+st.markdown(f'<style>{custom_css}</style>', unsafe_allow_html=True)
 
 # def calculate_total_carbon_footprint(conn, cursor):
 #     cursor.execute('SELECT SUM(Electricity_and_Energy_Consumption) FROM carbon_footprint')
