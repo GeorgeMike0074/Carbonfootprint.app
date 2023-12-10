@@ -273,8 +273,7 @@ def collect_public_transport_data(conn, cursor):
             conn.commit()
             
             # Display the calculated carbon footprint
-            st.header('Based on your input, your predicted carbon footprint is ' + " " + str(round(prediction[0], 4)) + " " + "kgCO2/kg")
-
+            st.title('Your Public Transport Carbon Footprint is' + " " + str(round(total_public_transport_footprint, 4)) + " " + "Metric Tonnes")
 
 
 def publictransport(conn, cursor):
@@ -615,7 +614,7 @@ def predict_total_carbon_footprint(conn, cursor, id):
 
         if input_data.all():
             prediction = predict_carbon_footprint(input_data)
-            st.header('Based on your input your carbon footprint is estimated at' + " " + str(round(prediction[0], 4)) + " " + "Metric Tonnes")
+            st.header('Based on your input, your predicted carbon footprint is ' + " " + str(round(prediction[0], 4)) + " " + "kgCO2/kg")
         else: st.error("You need to enter your data before footprint can be estimated")
     
 
