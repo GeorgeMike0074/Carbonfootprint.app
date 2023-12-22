@@ -219,7 +219,7 @@ def household(conn, cursor):
     f_electicity = ((electricity / 1000) * 0.207074)
     f_naturalgas = ((naturalgas / 100) * 0.20)* 0.001
     f_heatingoil = ((heatingoil / 100) * 0.27)
-    f_coal = (coal * 2195.88)
+    f_coal = (coal * 0.37)
     f_lpg = ((lpg / 100) * 0.23)
     f_propane = ((propane / 100) * 0.23)
     f_woodenpellets = (woodenpellets * 0.07)
