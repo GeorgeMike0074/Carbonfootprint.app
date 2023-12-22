@@ -207,7 +207,7 @@ def collect_household_data(conn, cursor):
 
 
 def household(conn, cursor):
-    global total
+    global total, noofmembers
     noofmembers = st.number_input("Enter Number of Members in your Household", min_value=1)
     electricity = st.number_input("Enter the kWh of Electricity Used")
     naturalgas = st.number_input("Enter kWh of Natural Gas Used ")
@@ -394,7 +394,7 @@ def collect_food_data(conn, cursor):
             # Display the calculated carbon footprint
             st.title('Your Food Carbon Footprint is' + " " + str(round(total_food_footprint, 4)) + " " + "Tonnes")
 def collect_waste_management_data(conn, cursor):
-    global total
+    global noofmembers
     st.subheader("Enter Data")
     
     with st.form(key='waste_management_form'):
@@ -422,8 +422,8 @@ def collect_waste_management_data(conn, cursor):
                                                 [plastic_waste, paper_waste, glass_waste, metal_waste, organic_waste]):
                 if waste_amount > 0:
                     carbon_equivalent = carbon_equivalents.get(waste_type, 0)
-                    carbon_footprint = (waste_amount * carbon_equivalent)
-                    total_carbon_footprint += carbon_footprint/noofmembers
+                    carbon_footprint = (waste_amount * carbon_equivalent)/noofmembers
+                    total_carbon_footprint += carbon_footprint
             st.session_state.total_waste_footprint = total_carbon_footprint
                     
             if 'pk' in st.session_state and st.session_state.pk is not None:
@@ -455,7 +455,7 @@ def collect_waste_management_data(conn, cursor):
             st.subheader("Estimated Carbon Footprint from Waste")
             st.write(
                 f"Your estimated carbon footprint from waste disposal is approximately {total_carbon_footprint:.2f} kgCO2e "
-                f"per year.")
+                f"per monthly.")
 
 
 def estimate_carbon_footprint_from_waste(conn, cursor):
@@ -486,8 +486,8 @@ def estimate_carbon_footprint_from_waste(conn, cursor):
                                         [plastic_waste, paper_waste, glass_waste, metal_waste, organic_waste]):
         if waste_amount > 0:
             carbon_equivalent = carbon_equivalents.get(waste_type, 0)
-            carbon_footprint = waste_amount * carbon_equivalent
-            total_carbon_footprint += carbon_footprint/noofmembers
+            carbon_footprint = (waste_amount * carbon_equivalent)/noofmembers
+            total_carbon_footprint += carbon_footprint
         cursor.execute('INSERT INTO carbon_footprint (Waste_Management) VALUES (?)', (total_carbon_footprint,))
         conn.commit()
 
