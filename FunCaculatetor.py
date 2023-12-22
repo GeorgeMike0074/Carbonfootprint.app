@@ -233,13 +233,13 @@ def collect_public_transport_data(conn, cursor):
     st.subheader("Enter Data")
     
     with st.form(key='public_transport_form'):
-        bus = st.number_input("Enter the Distance Travelled in Bus (in kilometers)")
-        coach = st.number_input("Enter the Distance Travelled in Coach (in kilometers)")
-        localtrain = st.number_input("Enter the Distance Travelled in Local Train (in kilometers)")
-        longdistancetrain = st.number_input("Enter the Distance Travelled in Long Distance Train (in kilometers)")
-        tram = st.number_input("Enter the Distance Travelled in Tram (in kilometers)")
-        subway = st.number_input("Enter the Distance Travelled in Subway (in kilometers)")
-        taxi = st.number_input("Enter the Distance Travelled in Taxi (in kilometers)")
+        bus = st.number_input("Enter the Distance Travelled in Bus monthly (in kilometers)")
+        coach = st.number_input("Enter the Distance Travelled in Coach monthly (in kilometers)")
+        localtrain = st.number_input("Enter the Distance Travelled in Local Train monthly (in kilometers)")
+        longdistancetrain = st.number_input("Enter the Distance Travelled in Long Distance Train monthly (in kilometers)")
+        tram = st.number_input("Enter the Distance Travelled in Tram monthly (in kilometers)")
+        subway = st.number_input("Enter the Distance Travelled in Subway monthly (in kilometers)")
+        taxi = st.number_input("Enter the Distance Travelled in Taxi monthly (in kilometers)")
         
         submitted = st.form_submit_button('Calculate Public Transport Carbon Footprint')
         
@@ -273,7 +273,7 @@ def collect_public_transport_data(conn, cursor):
             conn.commit()
             
             # Display the calculated carbon footprint
-            st.title('Your Public Transport Carbon Footprint is' + " " + str(round(total_public_transport_footprint, 4)) + " " + "Metric Tonnes")
+            st.title('Your monthly Public Transport Carbon Footprint is' + " " + str(round(total_public_transport_footprint, 4)) + " " + "Metric Tonnes")
 
 
 def publictransport(conn, cursor):
@@ -465,11 +465,11 @@ def estimate_carbon_footprint_from_waste(conn, cursor):
     # Questions about waste disposal
     st.subheader("Waste Disposal Habits")
     plastic_waste = st.number_input("How many kilograms of plastic waste do you dispose per month?")
-    paper_waste = st.number_input("How many kilograms of paper waste do you dispose of per week?")
-    glass_waste = st.number_input("How many kilograms of glass waste do you dispose of per week?")
-    metal_waste = st.number_input("How many kilograms of metal waste do you dispose of per week?")
+    paper_waste = st.number_input("How many kilograms of paper waste do you dispose of per month?")
+    glass_waste = st.number_input("How many kilograms of glass waste do you dispose of per month?")
+    metal_waste = st.number_input("How many kilograms of metal waste do you dispose of per month?")
     organic_waste = st.number_input(
-        "How many kilograms of organic waste (e.g., food scraps) do you dispose of per week?")
+        "How many kilograms of organic waste (e.g., food scraps) do you dispose of per month?")
 
     # Carbon conversion equivalents (sample values in kgCO2/kg of waste)
     carbon_equivalents = {
@@ -487,7 +487,7 @@ def estimate_carbon_footprint_from_waste(conn, cursor):
         if waste_amount > 0:
             carbon_equivalent = carbon_equivalents.get(waste_type, 0)
             carbon_footprint = waste_amount * carbon_equivalent
-            total_carbon_footprint += carbon_footprint
+            total_carbon_footprint += carbon_footprint/noofmembers
         cursor.execute('INSERT INTO carbon_footprint (Waste_Management) VALUES (?)', (total_carbon_footprint,))
         conn.commit()
 
