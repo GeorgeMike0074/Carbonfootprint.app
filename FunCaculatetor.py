@@ -132,24 +132,24 @@ def collect_household_data(conn, cursor):
     
     with st.form(key='household_form'):
         noofmembers = st.number_input("Enter Number of Members in your Household", min_value=1)
-        electricity = st.number_input("Enter the kWh of Electricity Used")
-        naturalgas = st.number_input("Enter kWh of Natural Gas Used ")
-        heatingoil = st.number_input("Enter Litres of Heating Oil Used")
-        coal = st.number_input("Enter Metric Tons of Coal Used")
-        lpg = st.number_input("Enter Litres of LPG Used")
-        propane = st.number_input("Enter Litres of Propane Used")
-        woodenpellets = st.number_input("Enter Metric Tons of Wooden Pellets Used")
+        electricity = st.number_input("Enter the kWh of Electricity Used per month")
+        naturalgas = st.number_input("Enter kWh of Natural Gas Used per month")
+        heatingoil = st.number_input("Enter Litres of Heating Oil Used per month")
+        coal = st.number_input("Enter Metric Tons of Coal Used per month")
+        lpg = st.number_input("Enter Litres of LPG Used per month")
+        propane = st.number_input("Enter Litres of Propane Used per month")
+        woodenpellets = st.number_input("Enter Metric Tons of Wooden Pellets Used per month")
 
         submitted = st.form_submit_button('Calculate Household Carbon Footprint')
         
         if submitted:
             # Calculate and store the household carbon footprint
-            f_electricity = ((electricity / 1000) * 0.7080)
-            f_naturalgas = ((naturalgas / 100) * 0.02)
+            f_electricity = ((electricity / 1000) * 0.207074)
+            f_naturalgas = ((naturalgas / 100) * 0.20)
             f_heatingoil = ((heatingoil / 100) * 0.27)
-            f_coal = (coal * 2.88)
-            f_lpg = ((lpg / 100) * 0.17)
-            f_propane = ((propane / 100) * 0.16)
+            f_coal = (coal * 2195.88)
+            f_lpg = ((lpg / 100) * 0.23)
+            f_propane = ((propane / 100) * 0.23)
             f_woodenpellets = (woodenpellets * 0.07)
             total = (f_electricity + f_coal + f_heatingoil + f_lpg + f_naturalgas + f_propane + f_woodenpellets) / noofmembers
             st.session_state.total_electricity_footprint = total
@@ -158,7 +158,7 @@ def collect_household_data(conn, cursor):
             conn.commit()
             
             # Display the calculated carbon footprint
-            st.header('Your Household Carbon Footprint is' + " " + str(round(total, 4)) + " " + "Metric Tonnes")
+            st.header('Your monthly Household Carbon Footprint is' + " " + str(round(total, 4)) + " " + "Metric Tonnes")
 
             # Store the primary key in session state
             st.session_state.pk = cursor.lastrowid
@@ -216,12 +216,12 @@ def household(conn, cursor):
     lpg = st.number_input("Enter Litres of LPG Used")
     propane = st.number_input("Enter Litres of Propane Used")
     woodenpellets = st.number_input("Enter Metric Tons of Wooden Pellets Used")
-    f_electicity = ((electricity / 1000) * 0.7080)
-    f_naturalgas = ((naturalgas / 100) * 0.02)
+    f_electicity = ((electricity / 1000) * 0.207074)
+    f_naturalgas = ((naturalgas / 100) * 0.20)
     f_heatingoil = ((heatingoil / 100) * 0.27)
-    f_coal = (coal * 2.88)
-    f_lpg = ((lpg / 100) * 0.17)
-    f_propane = ((propane / 100) * 0.16)
+    f_coal = (coal * 2195.88)
+    f_lpg = ((lpg / 100) * 0.23)
+    f_propane = ((propane / 100) * 0.23)
     f_woodenpellets = (woodenpellets * 0.07)
     total = (f_electicity + f_coal + f_heatingoil + f_lpg + f_naturalgas + f_propane + f_woodenpellets) / noofmembers
     
@@ -278,17 +278,17 @@ def collect_public_transport_data(conn, cursor):
 
 def publictransport(conn, cursor):
     global total1
-    bus = ((st.number_input("Enter the Distance Travelled in Bus") / 1000) * 0.10)
-    coach = ((st.number_input("Enter the Distance Travelled in Coach") / 1000) * 0.03)
-    localtrain = ((st.number_input("Enter the Distance Travelled in Local") / 1000) * 0.04)
-    longdistancetrain = ((st.number_input("Enter the Distance Travelled in Long Distance Train") / 10000) * 0.05)
-    tram = ((st.number_input("Enter the Distance Travelled in train") / 1000) * 0.03)
-    subway = ((st.number_input("Enter the Distance Travelled in subway") / 1000) * 0.03)
-    taxi = ((st.number_input("Enter the Distance Travelled in taxi") / 50) * 0.01)
+    bus = ((st.number_input("Enter the Distance Travelled in Bus per month ") / 1000) * 0.10)
+    coach = ((st.number_input("Enter the Distance Travelled in Coach per month") / 1000) * 0.03)
+    localtrain = ((st.number_input("Enter the Distance Travelled Locally by train per month ") / 1000) * 0.04)
+    longdistancetrain = ((st.number_input("Enter the Distance Travelled in Long Distance Train per month") / 10000) * 0.05)
+    tram = ((st.number_input("Enter the Distance Travelled in tram monthly") / 1000) * 0.03)
+    subway = ((st.number_input("Enter the Distance Travelled in subway per month") / 1000) * 0.03)
+    taxi = ((st.number_input("Enter the Distance Travelled in taxi per month") / 50) * 0.01)
     total1 = (bus + coach + localtrain + longdistancetrain + tram + subway + taxi)
     cursor.execute('INSERT INTO carbon_footprint (Transportation_and_Commuting) VALUES (?)', (total,))
     conn.commit()
-    st.title('Your Carbon Footprint is' + " " + str(round(total1, 4)) + " " + "Metric Tonnes")
+    st.title('Your Carbon Footprint is' + " " + str(round(total1 , 4)) + " " + "Metric Tonnes")
 
 
 def carbonfootprint(conn, cursor):
@@ -394,14 +394,15 @@ def collect_food_data(conn, cursor):
             # Display the calculated carbon footprint
             st.title('Your Food Carbon Footprint is' + " " + str(round(total_food_footprint, 4)) + " " + "Tonnes")
 def collect_waste_management_data(conn, cursor):
+    global total
     st.subheader("Enter Data")
     
     with st.form(key='waste_management_form'):
-        plastic_waste = st.number_input("How many kilograms of plastic waste do you dispose of per week?")
-        paper_waste = st.number_input("How many kilograms of paper waste do you dispose of per week?")
-        glass_waste = st.number_input("How many kilograms of glass waste do you dispose of per week?")
-        metal_waste = st.number_input("How many kilograms of metal waste do you dispose of per week?")
-        organic_waste = st.number_input("How many kilograms of organic waste (e.g., food scraps) do you dispose of per week?")
+        plastic_waste = st.number_input("How many kilograms of plastic waste do you dispose per month?")
+        paper_waste = st.number_input("How many kilograms of paper waste do you dispose per month?")
+        glass_waste = st.number_input("How many kilograms of glass waste do you dispose per month?")
+        metal_waste = st.number_input("How many kilograms of metal waste do you dispose per month?")
+        organic_waste = st.number_input("How many kilograms of organic waste (e.g., food scraps) do you dispose per month?")
         
         submitted = st.form_submit_button('Calculate Waste Management Carbon Footprint')
         
@@ -421,8 +422,8 @@ def collect_waste_management_data(conn, cursor):
                                                 [plastic_waste, paper_waste, glass_waste, metal_waste, organic_waste]):
                 if waste_amount > 0:
                     carbon_equivalent = carbon_equivalents.get(waste_type, 0)
-                    carbon_footprint = waste_amount * carbon_equivalent
-                    total_carbon_footprint += carbon_footprint
+                    carbon_footprint = (waste_amount * carbon_equivalent)
+                    total_carbon_footprint += carbon_footprint/noofmembers
             st.session_state.total_waste_footprint = total_carbon_footprint
                     
             if 'pk' in st.session_state and st.session_state.pk is not None:
@@ -463,7 +464,7 @@ def estimate_carbon_footprint_from_waste(conn, cursor):
 
     # Questions about waste disposal
     st.subheader("Waste Disposal Habits")
-    plastic_waste = st.number_input("How many kilograms of plastic waste do you dispose of per week?")
+    plastic_waste = st.number_input("How many kilograms of plastic waste do you dispose per month?")
     paper_waste = st.number_input("How many kilograms of paper waste do you dispose of per week?")
     glass_waste = st.number_input("How many kilograms of glass waste do you dispose of per week?")
     metal_waste = st.number_input("How many kilograms of metal waste do you dispose of per week?")
@@ -493,8 +494,8 @@ def estimate_carbon_footprint_from_waste(conn, cursor):
         # Display the estimated carbon footprint
     st.subheader("Estimated Carbon Footprint from Waste")
     st.write(
-        f"Your estimated carbon footprint from waste disposal is approximately {total_carbon_footprint:.2f} kgCO2e "
-        f"per year.")
+        f"Your estimated carbon footprint from waste disposal is approximately {total_carbon_footprint:.2f} Metric tonnes CO2e "
+        f"per month.")
 
 
 def pico(conn, cursor):
@@ -541,24 +542,6 @@ def pico(conn, cursor):
     close_db_connection(conn)
 
 
-
-# def calculate_total_carbon_footprint(conn, cursor):
-#     cursor.execute('SELECT SUM(Electricity_and_Energy_Consumption) FROM carbon_footprint')
-#     electricity_footprint = cursor.fetchone()[0] or 0
-
-#     cursor.execute('SELECT SUM(Transportation_and_Commuting) FROM carbon_footprint')
-#     transportation_footprint = cursor.fetchone()[0] or 0
-
-#     cursor.execute('SELECT SUM(Diet_and_Food_Choices) FROM carbon_footprint')
-#     diet_footprint = cursor.fetchone()[0] or 0
-
-#     cursor.execute('SELECT SUM(Waste_Management) FROM carbon_footprint')
-#     waste_footprint = cursor.fetchone()[0] or 0
-
-#     total_carbon_footprint = electricity_footprint + transportation_footprint + diet_footprint + waste_footprint
-
-#     cursor.execute('INSERT INTO carbon_footprint (Estimated_Carbon_Footprint) VALUES (?)', (total_carbon_footprint,))
-#     conn.commit()
 
 def display_carbon_footprint_breakdown(conn, cursor):
     cursor.execute('''
@@ -660,34 +643,4 @@ if __name__ == "__main__":
 
 
 
-# def main():
-#     # Apply the custom CSS
-#     st.markdown(f'<style>{custom_css}</style>', unsafe_allow_html=True)
-#     st.title("Carbon Footprint Calculator")
 
-#     conn, cursor = create_db_connection()
-
-#     st.sidebar.header("Category")
-#     option = st.sidebar.selectbox("Select a category:", ["Household", "Public Transport", "Food", "Waste Management"])
-
-#     if option == "Household":
-#         st.header("Household Carbon Footprint")
-#         collect_household_data(conn, cursor)
-#     elif option == "Public Transport":
-#         st.header("Public Transport")
-#         collect_public_transport_data(conn, cursor)
-#     elif option == "Food":
-#         st.header("Food Carbon Footprint")
-#         collect_food_data(conn, cursor)
-#     elif option == "Waste Management":
-#         st.header("Waste Management Carbon Footprint")
-#         collect_waste_management_data(conn, cursor)
-
-#     if st.sidebar.button("Calculate Carbon Footprint"):
-#         calculate_total_carbon_footprint(conn, cursor)
-#         display_carbon_footprint_breakdown(conn, cursor)
-
-#     close_db_connection(conn)
-
-# if __name__ == "__main__":
-#     main()
