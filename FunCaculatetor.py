@@ -454,7 +454,7 @@ def collect_waste_management_data(conn, cursor):
             # Display the estimated carbon footprint
             st.subheader("Estimated Carbon Footprint from Waste")
             st.write(
-                f"Your estimated carbon footprint from waste disposal is approximately {total_carbon_footprint:.2f} kgCO2e "
+                f"Your estimated carbon footprint from waste disposal is approximately {total_carbon_footprint:.2f} Metric tonnes CO2e "
                 f"per monthly.")
 
 
