@@ -597,10 +597,9 @@ def predict_total_carbon_footprint(conn, cursor, id):
 
         if input_data.all():
             prediction = predict_carbon_footprint(input_data)
-            st.header('Based on your input, your predicted carbon footprint is ' + " " + str(round(prediction[0], 4)) + " " + "kgCO2/kg")
+            st.header('Based on your input, your predicted carbon footprint is ' + " " + str(round(prediction[0], 4)) + " " + "Metric tonnes CO2")
         else: st.error("You need to enter your data before footprint can be estimated")
     
-
 
 def main():
     # Apply the custom CSS
