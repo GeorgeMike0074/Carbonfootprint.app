@@ -145,8 +145,8 @@ def collect_household_data(conn, cursor):
         if submitted:
             # Calculate and store the household carbon footprint
             f_electricity = ((electricity / 1000) * 0.207074)
-            f_naturalgas = ((naturalgas / 100) * 0.20)
-            f_heatingoil = ((heatingoil / 100) * 0.27)
+            f_naturalgas = ((naturalgas / 1000) * 0.20)
+            f_heatingoil = ((heatingoil / 1000) * 0.27)
             f_coal = (coal * 2195.88)
             f_lpg = ((lpg / 100) * 0.23)
             f_propane = ((propane / 100) * 0.23)
@@ -217,7 +217,7 @@ def household(conn, cursor):
     propane = st.number_input("Enter Litres of Propane Used")
     woodenpellets = st.number_input("Enter Metric Tons of Wooden Pellets Used")
     f_electicity = ((electricity / 1000) * 0.207074)
-    f_naturalgas = ((naturalgas / 100) * 0.20)
+    f_naturalgas = ((naturalgas / 100) * 0.20)* 0.001
     f_heatingoil = ((heatingoil / 100) * 0.27)
     f_coal = (coal * 2195.88)
     f_lpg = ((lpg / 100) * 0.23)
@@ -248,13 +248,13 @@ def collect_public_transport_data(conn, cursor):
             bus_footprint = (bus / 1000) * 0.10
             coach_footprint = (coach / 1000) * 0.03
             localtrain_footprint = (localtrain / 1000) * 0.04
-            longdistancetrain_footprint = (longdistancetrain / 10000) * 0.05
+            longdistancetrain_footprint = (longdistancetrain / 1000) * 0.05
             tram_footprint = (tram / 1000) * 0.03
             subway_footprint = (subway / 1000) * 0.03
             taxi_footprint = (taxi / 50) * 0.01
             total_public_transport_footprint = (bus_footprint + coach_footprint + localtrain_footprint + 
                                                 longdistancetrain_footprint + tram_footprint + 
-                                                subway_footprint + taxi_footprint)
+                                                subway_footprint + taxi_footprint) / 0.001
             st.session_state.total_transportation_footprint = total_public_transport_footprint
             
             if 'pk' in st.session_state and st.session_state.pk is not None:
