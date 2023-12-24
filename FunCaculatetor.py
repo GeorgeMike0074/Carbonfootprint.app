@@ -422,7 +422,7 @@ def collect_waste_management_data(conn, cursor):
                                                 [plastic_waste, paper_waste, glass_waste, metal_waste, organic_waste]):
                 if waste_amount > 0:
                     carbon_equivalent = carbon_equivalents.get(waste_type, 0)
-                    carbon_footprint = (waste_amount * carbon_equivalent)*0.001
+                    carbon_footprint = (waste_amount * carbon_equivalent)
                     total_carbon_footprint += carbon_footprint
             st.session_state.total_waste_footprint = total_carbon_footprint
                     
@@ -486,7 +486,7 @@ def estimate_carbon_footprint_from_waste(conn, cursor):
                                         [plastic_waste, paper_waste, glass_waste, metal_waste, organic_waste]):
         if waste_amount > 0:
             carbon_equivalent = carbon_equivalents.get(waste_type, 0)
-            carbon_footprint = (waste_amount * carbon_equivalent)*0.001
+            carbon_footprint = (waste_amount * carbon_equivalent)
             total_carbon_footprint += carbon_footprint
         cursor.execute('INSERT INTO carbon_footprint (Waste_Management) VALUES (?)', (total_carbon_footprint,))
         conn.commit()
